@@ -2,11 +2,12 @@
 
 namespace App\Query\Flights;
 
+use App\DTO\FlightSearchFilters;
 use App\Models\Flight;
 
 class EloquentFlights
 {
-    public function getFlightList(array $filters)
+    public function getFlightList(FlightSearchFilters $filters)
     {
         $query = Flight::query()
             ->select(
@@ -24,24 +25,18 @@ class EloquentFlights
             ->join('cities as oc', 'oc.id', '=', 'o.city_id')
             ->join('cities as dc', 'dc.id', '=', 'd.city_id');
         
-        if (isset($filters['origin_city'])) {
-            $query = $query->where('oc.id', $filters['origin_city']);
+        if ($filters->getOriginCityId()) {
+            $query = $query->where('oc.id', $filters->getOriginCityId());
         }
 
-        if (isset($filters['destination_city'])) {
-            $query = $query->where('dc.id', $filters['destination_city']);
+        if ($filters->getDestinationCityId()) {
+            $query = $query->where('dc.id', $filters->getDestinationCityId());
         }
 
-        if (isset($filters['departure_time'])) {
+        if ($filters->getDepartureTime()) {
             $query = $query
-                ->where('departure_time', '>', $filters['departure_time'])
-                ->whereRaw("departure_time < to_date(?, 'YYY-MM-DD') + interval '1 day'", [$filters['departure_time']]);
-        }
-
-        if (isset($filters['arrival_time'])) {
-            $query = $query
-                ->where('arrival_time', '>', $filters['arrival_time'])
-                ->whereRaw("arrival_time < to_date(?, 'YYY-MM-DD') + interval '1 day'", [$filters['arrival_time']]);
+                ->where('departure_time', '>', $filters->getDepartureTime())
+                ->whereRaw("departure_time < to_date(?, 'YYY-MM-DD') + interval '1 day'", [$filters->getDepartureTime()]);
         }
 
         return $query->get();
