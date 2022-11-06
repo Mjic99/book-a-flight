@@ -25,6 +25,10 @@ class FlightsService
         $returnFlights = $this->eloquentFlights->getFlightList($returnFilters);
 
         return view('flights', [
+            'departureDate' => $filters['departure_time'],
+            'returnDate' => $filters['arrival_time'],
+            'originCity' => $departureFlights[0]->origin_city,
+            'destinationCity' => $departureFlights[0]->destination_city,
             'departureFlights' => $departureFlights,
             'returnFlights' => $returnFlights
         ]);
