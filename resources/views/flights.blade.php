@@ -20,7 +20,7 @@
                         <div>
                             <span class="font-bold">To:</span><br>
                             {{ $flight->destination_city }}<br>
-                            Airport: {{ $flight->origin_airport }}<br>
+                            Airport: {{ $flight->destination_airport }}<br>
                             <span class="text-2xl">{{ \Carbon\Carbon::parse($flight->arrival_time)->format('h:i') }}</span>
                         </div>
                         <div>
@@ -48,7 +48,7 @@
                         <div>
                             <span class="font-bold">To:</span><br>
                             {{ $flight->destination_city }}<br>
-                            Airport: {{ $flight->origin_airport }}<br>
+                            Airport: {{ $flight->destination_airport }}<br>
                             <span class="text-2xl">{{ \Carbon\Carbon::parse($flight->arrival_time)->format('h:i') }}</span>
                         </div>
                         <div>

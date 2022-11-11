@@ -4,6 +4,7 @@ namespace App\Query\Flights;
 
 use App\DTO\FlightSearchFilters;
 use App\Models\Flight;
+use Carbon\Carbon;
 
 class EloquentFlights
 {
@@ -34,9 +35,10 @@ class EloquentFlights
         }
 
         if ($filters->getDepartureTime()) {
-            $query = $query
-                ->where('departure_time', '>', $filters->getDepartureTime())
-                ->whereRaw("departure_time < to_date(?, 'YYY-MM-DD') + interval '1 day'", [$filters->getDepartureTime()]);
+            $nextDay = new Carbon($filters->getDepartureTime());
+            $nextDay->addDay();
+            
+            $query = $query->whereBetween('departure_time', [$filters->getDepartureTime(), $nextDay->format('Y-m-d')]);
         }
 
         return $query->get();
